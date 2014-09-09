@@ -31,6 +31,7 @@ var QueuedConnection = (function(_super){
 	QueuedConnection.prototype = Object.create(_super.prototype);
 
 	QueuedConnection.prototype.DoConnection = function() {
+
 		var req = https.request(this._options, this._responseHandler);
 		req.on('close', _connectionCompleteHandler(this));
 		this._requestHandler.call(this, req);
@@ -154,6 +155,23 @@ var QueuedConnectionManager = (function(){
 			req.setTimeout(30000, function() {console.log("The request timed out")});
 
 			req.end()
+		}
+
+		if (requestOptions.method && requestOptions.method.toUpperCase() == "POST") {
+			var length = 0;
+			switch (typeof requestBody) {
+				case 'string':
+				case 'number':
+					length = ("" + requestBody).length;
+					break;
+
+				case 'object':
+					length = JSON.stringify(requestBody).length;
+					break;
+			}
+
+			requestOptions.headers = requestOptions.headers || {};
+			requestOptions.headers["Content-Length"] = length;
 		}
 
 		this.QueueConnection(requestOptions, requestHandler, responseHandler);
