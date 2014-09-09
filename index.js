@@ -649,7 +649,7 @@ var PodCreateRequest = (function(){
 		}
 
 		if (KnownImages.indexOf(this.Image) === -1) {
-			cli.info("Unkown image " + this.Image + ". using default: " + KnownImages[0]);
+			cli.info("Unknown image " + this.Image + ". using default: " + KnownImages[0]);
 			this.Image = KnownImages[0];
 		}
 	}
